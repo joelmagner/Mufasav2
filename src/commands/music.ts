@@ -19,10 +19,15 @@ export default class Music {
     if (!voiceChannel || !(await isUserInVoiceChannel(message))) return;
     if (!args.length) return await message.channel.send("Please specify a song to play.");
 
-    const serverQueue = getServerInfo(message);
+    const serverInfo = getServerInfo(message);
+
+    // update to see if bot has been moved
+    if (serverInfo?.voiceChannel) {
+      serverInfo.voiceChannel = message.guild?.me?.voice.channel ?? serverInfo.voiceChannel;
+    }
 
     // check if same channel as bot.
-    if (serverQueue?.voiceChannel && serverQueue?.voiceChannel.id !== voiceChannel.id) {
+    if (serverInfo?.voiceChannel && serverInfo?.voiceChannel.id !== voiceChannel.id) {
       return await message.channel.send({
         embeds: [
           {
@@ -33,7 +38,7 @@ export default class Music {
       });
     }
 
-    if (!serverQueue && message.guild?.id) {
+    if (!serverInfo && message.guild?.id) {
       server.set(message.guild.id, createServer(voiceChannel, message.channel));
     }
 

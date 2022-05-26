@@ -27,7 +27,7 @@ const getSoundcloudSong = async (message: Message, server: Server) => {
   const isSoundcloud = await play.so_validate(nextSong.url);
   if (isSoundcloud === "track") {
     return await play.soundcloud(nextSong.url);
-  } else if (isSoundcloud === "playlist" || isSoundcloud === "search") {
+  } else if (isSoundcloud == "playlist") {
     await message.channel.send("Playlists from soundcloud are not supported yet.");
     return null;
   }
