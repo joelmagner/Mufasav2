@@ -1,6 +1,6 @@
 import { Message } from "discord.js";
 
-export const isInVoiceChannel = async (message: Message): Promise<boolean> => {
+export const isUserInVoiceChannel = async (message: Message): Promise<boolean> => {
   const voiceChannel = message.member?.voice?.channel;
   if (!voiceChannel) {
     await message.channel.send({

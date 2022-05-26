@@ -5,7 +5,7 @@ import { Message } from "discord.js";
 import { album } from "./player/spotify/album";
 import { createServer } from "../utils/createServer";
 import { getServerInfo } from "../utils/getGuildInfo";
-import { isInVoiceChannel } from "../utils/isInVoiceChannel";
+import { isUserInVoiceChannel } from "../utils/isUserInVoiceChannel";
 import { joinVoice } from "../utils/joinVoice";
 import { player } from "./player/player";
 import { playlist } from "./player/spotify/playlist";
@@ -16,7 +16,7 @@ import { track } from "./player/spotify/track";
 export default class Music {
   init = async (message: Message, args: string[], playTop = false) => {
     const voiceChannel = message.member?.voice.channel;
-    if (!voiceChannel || !(await isInVoiceChannel(message))) return;
+    if (!voiceChannel || !(await isUserInVoiceChannel(message))) return;
     if (!args.length) return await message.channel.send("Please specify a song to play.");
 
     const serverQueue = getServerInfo(message);

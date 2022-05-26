@@ -2,11 +2,11 @@ import { AudioPlayerStatus } from "@discordjs/voice";
 import { Message } from "discord.js";
 import { emptyErrorMessage } from "../../../utils/errors/empty.error";
 import { getServerInfo } from "../../../utils/getGuildInfo";
-import { isInVoiceChannel } from "../../../utils/isInVoiceChannel";
+import { isUserInVoiceChannel } from "../../../utils/isUserInVoiceChannel";
 import { player } from "../player";
 
 export const skip = async (message: Message, args: string[]) => {
-  if (!(await isInVoiceChannel(message))) return;
+  if (!(await isUserInVoiceChannel(message))) return;
   const audioPlayer = getServerInfo(message)?.audioPlayer;
   if (!audioPlayer) return await message.channel.send("No audioPlayer found.");
   if (audioPlayer?.state.status !== AudioPlayerStatus.Playing) {
