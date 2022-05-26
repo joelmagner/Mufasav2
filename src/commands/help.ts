@@ -1,6 +1,7 @@
 import { Message, MessageEmbed } from "discord.js";
-const logoPng =
-  "https://camo.githubusercontent.com/848b01c611455668ef21f91f0bc32d974c87df7714dd7506797c23702f722cbf/68747470733a2f2f692e696d6775722e636f6d2f396f745338475a2e706e67";
+
+import { logoPng } from "../utils/logo";
+
 const helpCommand = async (message: Message) => {
   const help = new MessageEmbed()
     .setColor("#0099ff")
@@ -10,8 +11,7 @@ const helpCommand = async (message: Message) => {
     .addFields(
       {
         name: "!play `input` *[alias: !p]*",
-        value:
-          "*Spotify:* Song URL or playlist URL.\n*YouTube:* Song URL or search term.",
+        value: "*Spotify:* Song URL or playlist URL.\n*YouTube:* Song URL or search term.",
       },
       {
         name: "!playtop *[alias: !pt]*",
@@ -22,10 +22,7 @@ const helpCommand = async (message: Message) => {
       { name: "!shuffle *[alias: !mix]*", value: "Shuffle songs in queue" },
       { name: "!leave", value: "Bot leaves channel, useful for bugs." }
     )
-    .addField(
-      "!clear `amount` *[default: 10]*",
-      "Clears requested amount of messages from chat"
-    )
+    .addField("!clear `amount` *[default: 10]*", "Clears requested amount of messages from chat")
     .addField("!postureinfo", "Get reminders for your posture :chair:")
     .setTimestamp()
     .setFooter("Mufasa Bot", logoPng);

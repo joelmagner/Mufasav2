@@ -2,9 +2,14 @@ import { Client, Message } from "discord.js";
 import { addMemberToPostureRole, postureInfo } from "./postureCheck";
 
 import PlayCommand from "./play";
-import clearCommand from "./clear";
+// import clearCommand from "./clear";
+import { getQueue } from "./player/getQueue";
 import helpCommand from "./help";
+import { idle } from "./player/idle";
+import { leave } from "./player/leave";
 import pingCommand from "./ping";
+import { shuffle } from "./player/shuffle";
+import { skip } from "./player/skip";
 
 let player: PlayCommand;
 
@@ -21,7 +26,7 @@ const command = async (client: Client, message: Message, cmd: string, args: stri
         await pingCommand(client, message);
         break;
       case "clear":
-        await clearCommand(message, args);
+        // await clearCommand(message, args);
         break;
       case "play":
       case "p":
@@ -33,14 +38,14 @@ const command = async (client: Client, message: Message, cmd: string, args: stri
         break;
       case "skip":
       case "fs":
-        if (player) await player.skip(message, args);
+        if (player) await skip(message, args);
         break;
       case "queue":
-        if (player) await player.queue(message);
+        if (player) await getQueue(message);
         break;
       case "shuffle":
       case "mix":
-        if (player) await player.shuffle(message);
+        if (player) await shuffle(message);
         break;
       case "help":
       case "h":
@@ -56,11 +61,14 @@ const command = async (client: Client, message: Message, cmd: string, args: stri
       case "postureinfo":
         await postureInfo(message);
         break;
+      case "idle":
+        await idle(message);
+        break;
       case "leave":
-        if (player) await player.leave(message);
+        if (player) await leave(message);
         break;
       default:
-        await message.channel.send("We don't have that command!");
+        await message.channel.send({ embeds: [{ description: "We don't have that command" }] });
         break;
     }
   } catch (err) {
