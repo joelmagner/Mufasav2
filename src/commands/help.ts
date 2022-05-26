@@ -6,19 +6,19 @@ const helpCommand = async (message: Message) => {
   const help = new MessageEmbed()
     .setColor("#0099ff")
     .setTitle("Mufasa bot")
-    .setAuthor("v0.0.7", logoPng, logoPng)
+    .setAuthor("v1.0.2", logoPng, logoPng)
     .setThumbnail(logoPng)
     .addFields(
       {
         name: "!play `input` *[alias: !p]*",
-        value: "*Spotify:* Song, Album or Playlist URL.\n*YouTube:* Song URL or search term.",
+        value: "*Spotify:* Song, Album or Playlist URL.\n*YouTube:* Song URL or search term.\n*Soundcloud:* Song URL",
       },
       {
         name: "!playtop *[alias: !pt]*",
         value: "Places song first in queue",
       },
       { name: "!queue *[alias: !q]*", value: "See the current queue" },
-      { name: "!skip <amount> *[alias: !fs]*", value: "Skip song(s)" },
+      { name: "!skip `amount` *[alias: !fs]*", value: "Skip song(s)" },
       { name: "!shuffle *[alias: !mix]*", value: "Shuffle songs in queue" },
       { name: "!leave", value: "Bot leaves channel, useful for bugs." }
     )
