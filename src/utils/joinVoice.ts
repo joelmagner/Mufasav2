@@ -1,20 +1,20 @@
 import { DiscordGatewayAdapterCreator, joinVoiceChannel } from "@discordjs/voice";
 
 import { Message } from "discord.js";
-import { getGuildInfo } from "./getGuildInfo";
+import { getServerInfo } from "./getGuildInfo";
 
 export const joinVoice = async (message: Message) => {
   if (message.guild && message?.member?.voice?.channel) {
-    if (!getGuildInfo(message)?.connection) {
+    if (!getServerInfo(message)?.connection) {
       try {
         const connection = joinVoiceChannel({
           channelId: message.member.voice.channel.id,
           guildId: message.guild.id,
           adapterCreator: message.guild.voiceAdapterCreator as DiscordGatewayAdapterCreator,
         });
-        const x = getGuildInfo(message);
-        if (x) {
-          x.connection = connection;
+        const channel = getServerInfo(message);
+        if (channel) {
+          channel.connection = connection;
         } else {
           console.log("Couldn't connect to channel!");
         }

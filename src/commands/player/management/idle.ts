@@ -1,10 +1,10 @@
 import { AudioPlayerStatus } from "@discordjs/voice";
 import { Message } from "discord.js";
-import { getGuildInfo } from "../../utils/getGuildInfo";
-import { queue } from "../../utils/queue";
+import { getServerInfo } from "../../../utils/getGuildInfo";
+import { server } from "../../../utils/server";
 
 export const idle = async (message: Message) => {
-  const audioPlayer = getGuildInfo(message)?.audioPlayer;
+  const audioPlayer = getServerInfo(message)?.audioPlayer;
   if (audioPlayer?.state?.status !== AudioPlayerStatus.Idle) {
     // is playing or doing something...
     console.log("Apparently not idling..", audioPlayer?.state?.status);
@@ -12,11 +12,11 @@ export const idle = async (message: Message) => {
   }
 
   const created = message.createdTimestamp;
-
   // if five minutes have passed
   if (created + 300000 < Date.now()) {
-    getGuildInfo(message)?.connection?.destroy();
-    queue.delete(message.guild!.id);
+    getServerInfo(message)?.connection?.destroy();
+    const guildId = message.guild?.id;
+    if (guildId) server.delete(guildId);
     console.log("idle, leaving...");
   }
   return;

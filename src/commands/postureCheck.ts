@@ -13,11 +13,7 @@ const isWithinOpeningHours = () => {
   const now = new Date();
   const time = now.getHours() * 60 + now.getMinutes();
   const weekday = now.getDay() !== 6 && now.getDay() !== 0;
-  console.log(
-    "isWithinOpeningHours",
-    weekday && time >= start && time < end,
-    new Date(Date.now()).toLocaleTimeString()
-  );
+  console.log("isWithinOpeningHours", weekday && time >= start && time < end, new Date(Date.now()).toLocaleTimeString());
   return weekday && time >= start && time < end;
 };
 
@@ -32,8 +28,7 @@ const postureInfo = async (message: Message) => {
           },
           {
             name: "Reminders are sent Mon-Fri 10:15-16:45",
-            value:
-              "Occurs with a 2-4h irregular interval. Opt out `!badposture`.",
+            value: "Occurs with a 2-4h irregular interval. Opt out `!badposture`.",
           },
         ],
       },
@@ -68,9 +63,7 @@ const createChannelAndRole = async (message: Message) => {
 };
 
 const addMemberToPostureRole = async (message: Message, optOut?: boolean) => {
-  const desiredRole = message.member?.roles.cache.find(
-    (role) => role.name === "posture"
-  );
+  const desiredRole = message.member?.roles.cache.find((role) => role.name === "posture");
   const roles = await message.guild?.roles.fetch();
   const postureRoleInGuild = roles?.find((role) => role.name === "posture");
 
@@ -117,10 +110,7 @@ const postureCommand = async (client: Client) => {
   guilds.forEach(async (guild) => {
     const g = await guild.fetch();
     g.channels.cache.forEach(async (channel) => {
-      if (
-        channel.type === "GUILD_TEXT" &&
-        (channel as TextChannel).name.toLowerCase() === "posturecheck"
-      ) {
+      if (channel.type === "GUILD_TEXT" && (channel as TextChannel).name.toLowerCase() === "posturecheck") {
         const roles = await g.roles.fetch();
         const postureRole = roles.find((role) => role.name === "posture");
         if (!postureRole?.id) return;
@@ -138,14 +128,11 @@ const postureCommand = async (client: Client) => {
                 },
                 {
                   name: "Reminders are sent Mon-Fri 10:15-16:45",
-                  value:
-                    "Occurs with a 2-4h irregular interval.\nOpt out `!badposture`.",
+                  value: "Occurs with a 2-4h irregular interval.\nOpt out `!badposture`.",
                 },
               ],
               image: {
-                url: postureImages[
-                  Math.floor(Math.random() * postureImages.length)
-                ],
+                url: postureImages[Math.floor(Math.random() * postureImages.length)],
               },
             },
           ],
@@ -153,15 +140,6 @@ const postureCommand = async (client: Client) => {
       }
     });
   });
-
-  // add randomized interval
-  // post img with picture
-  // make sure it doesn't post before and after workhours. maybe do @here
 };
 
-export {
-  postureCommand,
-  isWithinOpeningHours,
-  addMemberToPostureRole,
-  postureInfo,
-};
+export { postureCommand, isWithinOpeningHours, addMemberToPostureRole, postureInfo };

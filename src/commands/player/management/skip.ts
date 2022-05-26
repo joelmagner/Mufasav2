@@ -1,12 +1,13 @@
 import { AudioPlayerStatus } from "@discordjs/voice";
 import { Message } from "discord.js";
-import { getGuildInfo } from "../../utils/getGuildInfo";
-import { isInVoiceChannel } from "../../utils/isInVoiceChannel";
-import { player } from "./player";
+import { emptyErrorMessage } from "../../../utils/errors/empty.error";
+import { getServerInfo } from "../../../utils/getGuildInfo";
+import { isInVoiceChannel } from "../../../utils/isInVoiceChannel";
+import { player } from "../player";
 
 export const skip = async (message: Message, args: string[]) => {
   if (!(await isInVoiceChannel(message))) return;
-  const audioPlayer = getGuildInfo(message)?.audioPlayer;
+  const audioPlayer = getServerInfo(message)?.audioPlayer;
   if (!audioPlayer) return await message.channel.send("No audioPlayer found.");
   if (audioPlayer?.state.status !== AudioPlayerStatus.Playing) {
     await message.channel.send({
@@ -15,25 +16,25 @@ export const skip = async (message: Message, args: string[]) => {
   }
   audioPlayer.state.status = AudioPlayerStatus.Idle; // DO NOT DELETE!
   try {
-    const q = getGuildInfo(message);
-    if (q?.songs) {
-      if (!q.songs.length) {
+    const channel = getServerInfo(message);
+    if (channel?.songs) {
+      if (!channel.songs.length) {
         return await message.channel.send({ embeds: [{ description: "The end of the queue... Bye :wave:" }] });
       }
       const multiple = Number(args.join("")) ?? false;
       if (multiple) {
         for (let i = 0; i < multiple; i++) {
-          if (q.songs.length > multiple) q.songs.shift();
+          if (channel.songs.length > multiple) channel.songs.shift();
         }
       }
-      q.songs.shift();
+      channel.songs.shift();
       audioPlayer.stop();
       await message.channel.send({
-        embeds: [{ description: `Skipping ${multiple ? multiple + " songs" : "song"}... :next_track:` }],
+        embeds: [{ description: `Skipping ${multiple ? multiple + "songs" : "song"}... :next_track:` }],
       });
       return await player(message);
     } else {
-      return await message.channel.send("Nothing to skip :eyes:");
+      return await message.channel.send(emptyErrorMessage);
     }
   } catch (err) {
     console.log("error skipping ", err);

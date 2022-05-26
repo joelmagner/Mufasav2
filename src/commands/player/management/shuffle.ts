@@ -1,9 +1,9 @@
 import { Message } from "discord.js";
-import { Song } from "../../types/song.type";
-import { getGuildInfo } from "../../utils/getGuildInfo";
+import { Song } from "../../../types/song.type";
+import { getServerInfo } from "../../../utils/getGuildInfo";
 
 export const shuffle = async (message: Message) => {
-  const q = getGuildInfo(message);
+  const channel = getServerInfo(message);
 
   const shuffleArray = (array: Song[]) => {
     for (let i = array.length - 1; i > 0; i--) {
@@ -13,12 +13,12 @@ export const shuffle = async (message: Message) => {
     return array;
   };
 
-  if (q?.songs) {
-    q.songs = shuffleArray(q.songs);
+  if (channel?.songs) {
+    channel.songs = shuffleArray(channel.songs);
     return await message.channel.send({
       embeds: [
         {
-          description: `:arrows_counterclockwise: Shuffled ${q.songs.length} songs`,
+          description: `:arrows_counterclockwise: Shuffled ${channel.songs.length} songs`,
         },
       ],
     });

@@ -2,24 +2,24 @@ import * as play from "play-dl";
 
 import { AudioPlayerStatus } from "@discordjs/voice";
 import { Message } from "discord.js";
-import { album } from "./player/album";
-import { createServerQueue } from "../utils/createServerQueue";
-import { getGuildInfo } from "../utils/getGuildInfo";
+import { album } from "./player/spotify/album";
+import { createServer } from "../utils/createServer";
+import { getServerInfo } from "../utils/getGuildInfo";
 import { isInVoiceChannel } from "../utils/isInVoiceChannel";
 import { joinVoice } from "../utils/joinVoice";
 import { player } from "./player/player";
-import { playlist } from "./player/playlist";
-import { queue } from "../utils/queue";
-import { track } from "./player/track";
-import { youtube } from "./player/youtube";
+import { playlist } from "./player/spotify/playlist";
+import { search } from "./player/search/search";
+import { server } from "../utils/server";
+import { track } from "./player/spotify/track";
 
-export default class PlayCommmand {
-  init = async (message: Message, args: string[], playTop: boolean = false) => {
+export default class Music {
+  init = async (message: Message, args: string[], playTop = false) => {
     const voiceChannel = message.member?.voice.channel;
     if (!voiceChannel || !(await isInVoiceChannel(message))) return;
     if (!args.length) return await message.channel.send("Please specify a song to play.");
 
-    const serverQueue = getGuildInfo(message);
+    const serverQueue = getServerInfo(message);
 
     // check if same channel as bot.
     if (serverQueue?.voiceChannel && serverQueue?.voiceChannel.id !== voiceChannel.id) {
@@ -34,7 +34,7 @@ export default class PlayCommmand {
     }
 
     if (!serverQueue && message.guild?.id) {
-      queue.set(message.guild.id, createServerQueue(voiceChannel, message.channel));
+      server.set(message.guild.id, createServer(voiceChannel, message.channel));
     }
 
     if (play.is_expired()) {
@@ -43,7 +43,7 @@ export default class PlayCommmand {
 
     const spotifyLink = play.sp_validate(args.join(" "));
     if (!spotifyLink || spotifyLink === "search") {
-      await youtube(message, args, playTop);
+      await search(message, args, playTop);
     } else if (spotifyLink === "track") {
       await track(message, args, playTop);
     } else if (spotifyLink === "playlist") {
@@ -55,14 +55,9 @@ export default class PlayCommmand {
     // Join channel
     await joinVoice(message);
 
-    if (getGuildInfo(message)?.audioPlayer?.state.status !== AudioPlayerStatus.Playing) {
+    if (getServerInfo(message)?.audioPlayer?.state.status !== AudioPlayerStatus.Playing) {
       return await player(message);
     }
     return;
   };
 }
-// TODO: bryt ut menu-command.
-// TODO: bryta ut funktioner.
-// TODO: fixa felhantering, crashar den, gör det möjligt att inte behöva starta om hela node-processen.
-// TODO: testa youtube-länkar. // implementera annars.
-// TODO: skapa en mediaplayer för varje kanal.

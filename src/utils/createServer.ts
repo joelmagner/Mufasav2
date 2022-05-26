@@ -1,9 +1,9 @@
 import { NoSubscriberBehavior, createAudioPlayer } from "@discordjs/voice";
 import { StageChannel, TextBasedChannels, VoiceChannel } from "discord.js";
 
-import { Queue } from "src/types/queue.type";
+import { Server } from "src/types/server.type";
 
-export const createServerQueue = (voiceChannel: VoiceChannel | StageChannel, textChannel: TextBasedChannels): Queue => {
+export const createServer = (voiceChannel: VoiceChannel | StageChannel, textChannel: TextBasedChannels): Server => {
   return {
     voiceChannel,
     textChannel,

@@ -1,22 +1,22 @@
 import { Client, Message } from "discord.js";
 import { addMemberToPostureRole, postureInfo } from "./postureCheck";
 
-import PlayCommand from "./play";
-// import clearCommand from "./clear";
-import { getQueue } from "./player/getQueue";
+import Music from "./music";
 import helpCommand from "./help";
-import { idle } from "./player/idle";
-import { leave } from "./player/leave";
+import { idle } from "./player/management/idle";
+import { leave } from "./player/management/leave";
 import pingCommand from "./ping";
-import { shuffle } from "./player/shuffle";
-import { skip } from "./player/skip";
+// import clearCommand from "./clear";
+import { queue } from "./player/management/queue";
+import { shuffle } from "./player/management/shuffle";
+import { skip } from "./player/management/skip";
 
-let player: PlayCommand;
+let player: Music;
 
 const command = async (client: Client, message: Message, cmd: string, args: string[]) => {
   try {
     if (!player) {
-      player = new PlayCommand();
+      player = new Music();
       //   setInterval(async () => {
       //     isWithinOpeningHours() ? await postureCommand(client) : null;
       //   }, 60 * 1000 * 60 * Math.floor(Math.random() * (4 - 2 + 1) + 2)); // 2-4h
@@ -41,7 +41,7 @@ const command = async (client: Client, message: Message, cmd: string, args: stri
         if (player) await skip(message, args);
         break;
       case "queue":
-        if (player) await getQueue(message);
+        if (player) await queue(message);
         break;
       case "shuffle":
       case "mix":
@@ -68,7 +68,7 @@ const command = async (client: Client, message: Message, cmd: string, args: stri
         if (player) await leave(message);
         break;
       default:
-        await message.channel.send({ embeds: [{ description: "We don't have that command" }] });
+        await message.channel.send({ embeds: [{ color: 0xff0000, description: "We don't have that command" }] });
         break;
     }
   } catch (err) {

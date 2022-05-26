@@ -1,7 +1,7 @@
 import { Message } from "discord.js";
 
 const clearCommand = async (message: Message, args: string[]) => {
-  let limit: number = 10;
+  let limit = 10;
 
   if (args[0]) {
     try {
