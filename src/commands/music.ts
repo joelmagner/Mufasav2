@@ -9,6 +9,7 @@ import { isUserInVoiceChannel } from "../utils/isUserInVoiceChannel";
 import { joinVoice } from "../utils/joinVoice";
 import { player } from "./player/player";
 import { playlist } from "./player/spotify/playlist";
+import { refreshSpotifyToken } from "../utils/sessions/spotify.session";
 import { search } from "./player/search/search";
 import { server } from "../utils/server";
 import { track } from "./player/spotify/track";
@@ -42,9 +43,7 @@ export default class Music {
       server.set(message.guild.id, createServer(voiceChannel, message.channel));
     }
 
-    if (play.is_expired()) {
-      await play.refreshToken();
-    }
+    await refreshSpotifyToken();
 
     const spotifyLink = play.sp_validate(args.join(" "));
     if (!spotifyLink || spotifyLink === "search") {
