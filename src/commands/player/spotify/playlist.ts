@@ -11,8 +11,7 @@ export const playlist = async (message: Message, args: string[], playTop: boolea
   if (playTop) return await message.channel.send(errorTopOfQueue("playlist"));
 
   const playlist = (await play.spotify(args[0])) as SpotifyPlaylist;
-  await playlist.fetch();
-  const songs = playlist.page(1);
+  const songs = (await playlist.fetch())?.page(1);
   if (!songs) return await message.channel.send(playlistNotFound);
 
   for (let i = 1; i <= songs.length - 1; i++) {
