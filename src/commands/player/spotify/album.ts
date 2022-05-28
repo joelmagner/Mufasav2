@@ -11,7 +11,8 @@ export const album = async (message: Message, args: string[], playTop: boolean) 
   if (playTop) return await message.channel.send(errorTopOfQueue("album"));
 
   const album = (await play.spotify(args[0])) as SpotifyAlbum;
-  const songs = (await album.fetch())?.page(1);
+  await album.fetch();
+  const songs = album.page(1);
   if (!songs) return await message.channel.send(albumNotFound);
 
   for (let i = 1; i <= songs.length - 1; i++) {
