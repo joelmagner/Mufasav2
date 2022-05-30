@@ -13,16 +13,19 @@ import { playError } from "../../utils/errors/play.error";
 import { refreshSoundcloudToken } from "../../utils/sessions/soundcloud.session";
 import { server } from "../../utils/server";
 
-const idleTimer = async (message: Message) => setTimeout(async () => await idle(message), 60 * 1000 * 10);
+let getTimer: NodeJS.Timeout;
+const startTimer = async (message: Message) => {
+  getTimer = setTimeout(async () => await idle(message), 60 * 1000 * 10);
+};
 
 const getSoundcloudSong = async (message: Message, server: Server) => {
   const nextSong = server.songs?.[0];
   if (!nextSong) {
-    await idleTimer(message);
+    await startTimer(message);
     return null;
   }
 
-  clearTimeout(await idleTimer(message));
+  clearTimeout(getTimer);
   await refreshSoundcloudToken();
   const isSoundcloud = await play.so_validate(nextSong.url);
   if (isSoundcloud === "track") {
@@ -37,11 +40,11 @@ const getSoundcloudSong = async (message: Message, server: Server) => {
 const searchNextSong = async (message: Message, server: Server) => {
   const nextSong = server.songs?.[0];
   if (!nextSong) {
-    await idleTimer(message);
+    await startTimer(message);
     return null;
   }
 
-  clearTimeout(await idleTimer(message));
+  clearTimeout(getTimer);
   let foundTrack = await play.search(`${nextSong.url}`, {
     limit: 1,
   });
@@ -123,10 +126,10 @@ export const player = async (message: Message) => {
     console.log("⏭");
     getServerInfo(message)?.songs?.shift();
     if (getServerInfo(message)?.songs?.length) {
-      clearTimeout(await idleTimer(message));
+      clearTimeout(getTimer);
       await player(message);
     } else {
-      await idleTimer(message);
+      await startTimer(message);
     }
   });
 
