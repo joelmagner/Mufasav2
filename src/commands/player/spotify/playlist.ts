@@ -1,7 +1,7 @@
 import * as play from "play-dl";
 
 import { Message } from "discord.js";
-import { SpotifyPlaylist } from "play-dl/dist/Spotify/classes";
+import { SpotifyPlaylist } from "play-dl";
 import { errorTopOfQueue } from "../../../utils/errors/usage.error";
 import { getServerInfo } from "../../../utils/getGuildInfo";
 import { playlistMessage } from "../../../utils/messages/playlist.msg";

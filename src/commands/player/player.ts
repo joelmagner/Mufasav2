@@ -5,8 +5,8 @@ import { playingMessageSoundCloud, playingMessageYoutube } from "../../utils/mes
 
 import { Message } from "discord.js";
 import { Server } from "../../types/server.type";
-import { SoundCloudTrack } from "play-dl/dist/SoundCloud/classes";
-import { YouTubeVideo } from "play-dl/dist/YouTube/classes/Video";
+import { SoundCloudTrack } from "play-dl";
+import { YouTubeVideo } from "play-dl";
 import { getServerInfo } from "../../utils/getGuildInfo";
 import { idle } from "./management/idle";
 import { playError } from "../../utils/errors/play.error";
@@ -79,6 +79,8 @@ const playSong = async (message: Message, server: Server, soundcloud: boolean, s
     server.audioStream = await play.stream(song.url);
     nowPlayingMessage = playingMessageYoutube(requestedSong, song as YouTubeVideo);
   }
+
+  console.log("Song Info:", song.url);
 
   const resource = createAudioResource(server.audioStream.stream, {
     inputType: server.audioStream.type,

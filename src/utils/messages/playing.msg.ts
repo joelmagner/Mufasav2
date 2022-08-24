@@ -1,7 +1,7 @@
+import { SoundCloudTrack, YouTubeVideo } from "play-dl";
+
 import { MessageEmbed } from "discord.js";
 import { Song } from "../../types/song.type";
-import { SoundCloudTrack } from "play-dl/dist/SoundCloud/classes";
-import { YouTubeVideo } from "play-dl/dist/YouTube/classes/Video";
 import { logoPng } from "../logo";
 
 const calculateDuration = (s: number) => {

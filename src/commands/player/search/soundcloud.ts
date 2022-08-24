@@ -1,7 +1,7 @@
 import * as play from "play-dl";
 
 import { Song } from "../../../types/song.type";
-import { SoundCloudTrack } from "play-dl/dist/SoundCloud/classes";
+import { SoundCloudTrack } from "play-dl";
 import { refreshSoundcloudToken } from "../../../utils/sessions/soundcloud.session";
 
 export const soundcloud = async (args: string): Promise<Song | null> => {

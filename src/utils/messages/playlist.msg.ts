@@ -1,4 +1,4 @@
-import { SpotifyPlaylist, SpotifyTrack } from "play-dl/dist/Spotify/classes";
+import { SpotifyPlaylist, SpotifyTrack } from "play-dl";
 
 import { MessageEmbed } from "discord.js";
 import { logoPng } from "../logo";

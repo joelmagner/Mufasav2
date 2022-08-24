@@ -2,13 +2,14 @@ import * as play from "play-dl";
 
 import { Message } from "discord.js";
 import { Song } from "../../../types/song.type";
-import { SpotifyTrack } from "play-dl/dist/Spotify/classes";
+import { SpotifyTrack } from "play-dl";
 import { errorNotFound } from "../../../utils/errors/notfound.error";
 import { getServerInfo } from "../../../utils/getGuildInfo";
 import { trackMessage } from "../../../utils/messages/track.msg";
 
 export const track = async (message: Message, args: string[], playTop: boolean) => {
   try {
+    console.log("playing: ", args.join(""));
     const track = (await play.spotify(args.join(" "))) as SpotifyTrack;
     const songName = track.name + " - " + track.artists[0].name;
 
@@ -24,6 +25,7 @@ export const track = async (message: Message, args: string[], playTop: boolean) 
         if (hasSongs) getServerInfo(message)?.songs.splice(1, 0, hasSongs);
       }
     }
+    console.log("👁 playing: ", song.title, song.url);
     return await message.channel.send(trackMessage(song.title, song.url, playTop));
   } catch (err) {
     console.log("err", err);
