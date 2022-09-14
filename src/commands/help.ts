@@ -25,7 +25,7 @@ const helpCommand = async (message: Message) => {
       { name: "!postureinfo", value: "Get reminders for your posture :chair:" }
     )
     .setTimestamp()
-    .setFooter("Mufasa Bot", logoPng);
+    .setFooter({ text: "Mufasa Bot", iconURL: logoPng });
   return await message.channel.send({ embeds: [help] });
 };
 

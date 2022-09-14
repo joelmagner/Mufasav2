@@ -8,7 +8,7 @@ export const queueInfo = new MessageEmbed()
   .setDescription("Select the queue page you want to look at")
   .setColor(0x05c7e9)
   .setTimestamp()
-  .setFooter("Mufasa", logoPng);
+  .setFooter({ text: "Mufasa", iconURL: logoPng });
 
 export const queuePages = async (message: Message, songs: Song[]) => {
   const row = new MessageActionRow();
