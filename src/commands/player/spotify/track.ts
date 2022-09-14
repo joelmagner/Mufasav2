@@ -9,14 +9,13 @@ import { trackMessage } from "../../../utils/messages/track.msg";
 
 export const track = async (message: Message, args: string[], playTop: boolean) => {
   try {
-    console.log("playing: ", args.join(""));
-    const track = (await play.spotify(args.join(" "))) as SpotifyTrack;
-    const songName = track.name + " - " + track.artists[0].name;
+    const trackMetadata = (await play.spotify(args.join(" "))) as SpotifyTrack;
+    const songName = `${trackMetadata.name} - ${trackMetadata.artists[0].name}`;
 
     const song: Song = {
       title: songName,
-      url: track.url,
-      thumbnail: track.thumbnail?.url ?? "",
+      url: trackMetadata.url,
+      thumbnail: trackMetadata.thumbnail?.url ?? "",
     };
     if (getServerInfo(message)?.songs) {
       getServerInfo(message)?.songs.push(song);

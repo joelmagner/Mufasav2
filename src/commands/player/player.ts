@@ -37,6 +37,26 @@ const getSoundcloudSong = async (message: Message, server: Server) => {
   return null;
 };
 
+const getHighestRelevance = (searchResults: YouTubeVideo[]): YouTubeVideo => {
+  const highestViewCount = searchResults.sort((a: YouTubeVideo, b: YouTubeVideo) => {
+    return a.views > b.views ? -1 : 1;
+  });
+
+  const isMusicChannel = highestViewCount.sort((a: YouTubeVideo) => {
+    if (a.channel?.artist) return a.channel?.artist ? -1 : 1;
+    return 0;
+  });
+
+  const hasNameResemblance = isMusicChannel.sort((a: YouTubeVideo) => {
+    return (a.title?.split(" ") ?? [""]).some((word) => {
+      word.includes(a.channel?.name ?? "");
+    })
+      ? -1
+      : 0;
+  });
+  return hasNameResemblance[0];
+};
+
 const searchNextSong = async (message: Message, server: Server) => {
   const nextSong = server.songs?.[0];
   if (!nextSong) {
@@ -45,16 +65,15 @@ const searchNextSong = async (message: Message, server: Server) => {
   }
 
   clearTimeout(getTimer);
-  let foundTrack = await play.search(`${nextSong.url}`, {
-    limit: 1,
+  const foundTrack = await play.search(`${nextSong.title}`, {
+    limit: 3,
+    source: {
+      youtube: "video",
+    },
+    fuzzy: true,
   });
-  if (foundTrack?.[0]?.url) return foundTrack;
 
-  // fallback to searching, only needed for spotify links...
-  foundTrack = await play.search(`${nextSong.title}`, {
-    limit: 1,
-  });
-  if (foundTrack?.[0]?.url) return foundTrack;
+  if (foundTrack?.[0]?.url) return getHighestRelevance(foundTrack);
 
   return null;
 };
@@ -79,8 +98,6 @@ const playSong = async (message: Message, server: Server, soundcloud: boolean, s
     server.audioStream = await play.stream(song.url);
     nowPlayingMessage = playingMessageYoutube(requestedSong, song as YouTubeVideo);
   }
-
-  console.log("Song Info:", song.url);
 
   const resource = createAudioResource(server.audioStream.stream, {
     inputType: server.audioStream.type,
@@ -137,16 +154,19 @@ export const player = async (message: Message) => {
 
   if (!getServerInfo(message)?.songs?.length) {
     getServerInfo(message)?.connection?.destroy();
-    if (message.guild?.id) server.delete(message.guild?.id);
+    if (message.guild?.id) server.delete(message.guild.id);
     return await message.channel.send("Queue is empty. Destroying voice connection.");
   }
 
   if (channel.audioPlayer?.state.status === AudioPlayerStatus.Idle || channel.audioPlayer?.state.status === AudioPlayerStatus.Paused) {
     const soundcloudSong = await getSoundcloudSong(message, channel);
-    if (soundcloudSong) return await playSong(message, channel, true, soundcloudSong);
+    if (soundcloudSong) {
+      console.log("Soundcloud", soundcloudSong);
+      return await playSong(message, channel, true, soundcloudSong);
+    }
 
     const search = await searchNextSong(message, channel);
-    if (search) return await playSong(message, channel, false, search[0]);
+    if (search) return await playSong(message, channel, false, search);
 
     if (!soundcloudSong && !search) {
       // give up, go to next song.

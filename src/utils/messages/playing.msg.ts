@@ -11,18 +11,19 @@ const calculateDuration = (s: number) => {
 
 export const playingMessageSoundCloud = (req: Song, song: SoundCloudTrack) => {
   return new MessageEmbed()
-    .addField("Requested:", req.title)
-    .addField("Now Playing:", song.name)
-    .setFooter(`Duration: ${calculateDuration(song.durationInSec)}`, logoPng)
+    .addFields({ name: "Requested:", value: req.title }, { name: "Now Playing:", value: song.name })
+    .setFooter({
+      text: `Duration: ${calculateDuration(song.durationInSec)}`,
+      iconURL: logoPng,
+    })
     .setThumbnail(song.thumbnail ?? "")
     .setTimestamp();
 };
 
 export const playingMessageYoutube = (req: Song, song: YouTubeVideo) => {
   return new MessageEmbed()
-    .addField("Requested:", req.title)
-    .addField("Now Playing:", song?.title ?? "")
-    .setFooter(`Duration: ${song.durationRaw}`, logoPng)
+    .addFields({ name: "Requested:", value: req.title }, { name: "Now Playing:", value: song.title ?? "" })
+    .setFooter({ text: `Duration: ${song.durationRaw}`, iconURL: logoPng })
     .setThumbnail(req.thumbnail ?? "")
     .setTimestamp();
 };

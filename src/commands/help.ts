@@ -20,10 +20,10 @@ const helpCommand = async (message: Message) => {
       { name: "!skip `amount` *[alias: !fs]*", value: "Skip song(s)" },
       { name: "!queue *[alias: !q]*", value: "See the current queue" },
       { name: "!shuffle *[alias: !mix]*", value: "Shuffle songs in queue" },
-      { name: "!leave", value: "Bot leaves channel, useful for bugs." }
+      { name: "!leave", value: "Bot leaves channel, useful for bugs." },
+      { name: "!clear `amount` *[default: 10]*", value: "Clears requested amount of messages from chat" },
+      { name: "!postureinfo", value: "Get reminders for your posture :chair:" }
     )
-    // .addField("!clear `amount` *[default: 10]*", "Clears requested amount of messages from chat")
-    // .addField("!postureinfo", "Get reminders for your posture :chair:")
     .setTimestamp()
     .setFooter("Mufasa Bot", logoPng);
   return await message.channel.send({ embeds: [help] });

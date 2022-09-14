@@ -5,10 +5,9 @@ import { logoPng } from "../logo";
 
 export const playlistMessage = (playlist: SpotifyPlaylist, songs: SpotifyTrack[]) => {
   const songInfo = new MessageEmbed()
-    .addField(`Playlist`, playlist.name)
-    .addField("Songs", `Added **${songs.length}** tracks from playlist`)
+    .addFields({ name: "Playlist", value: playlist.name }, { name: "Songs", value: `Added **${songs.length}** tracks from playlist` })
     .setTimestamp()
-    .setFooter(`Playlist by: ${playlist.owner.name}`, logoPng);
+    .setFooter({ text: `Playlist by: ${playlist.owner.name}`, iconURL: logoPng });
   if (playlist.thumbnail) songInfo.setThumbnail(playlist.thumbnail.url);
   return { embeds: [songInfo] };
 };
