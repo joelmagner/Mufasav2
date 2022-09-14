@@ -20,9 +20,10 @@ const menuCommand = async (message: Message) => {
       { name: "!skip `amount` *[alias: !fs]*", value: "Skip song(s)" },
       { name: "!queue *[alias: !q]*", value: "See the current queue" },
       { name: "!shuffle *[alias: !mix]*", value: "Shuffle songs in queue" },
-      { name: "!leave", value: "Bot leaves channel, useful for bugs." },
+      { name: "!leave", value: "Bot leaves channel, useful for bugs" },
       { name: "!clear `amount` *[default: 10]*", value: "Clears requested amount of messages from chat" },
-      { name: "!postureinfo", value: "Get reminders for your posture :chair:" }
+      { name: "!lunch", value: "Selects a random lunch place. Add names after if you want a person to select the lunch place instead" }
+      // { name: "!postureinfo", value: "Get reminders for your posture :chair:" }
     )
     .setTimestamp()
     .setFooter({ text: "Mufasa Bot", iconURL: logoPng });
