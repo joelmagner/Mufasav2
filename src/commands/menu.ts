@@ -2,7 +2,7 @@ import { Message, MessageEmbed } from "discord.js";
 
 import { logoPng } from "../utils/logo";
 
-const helpCommand = async (message: Message) => {
+const menuCommand = async (message: Message) => {
   const help = new MessageEmbed()
     .setColor("#F8A926")
     .setTitle("Mufasa bot")
@@ -29,4 +29,4 @@ const helpCommand = async (message: Message) => {
   return await message.channel.send({ embeds: [help] });
 };
 
-export default helpCommand;
+export default menuCommand;

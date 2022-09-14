@@ -1,12 +1,11 @@
 import { Client, Message } from "discord.js";
-import { addMemberToPostureRole, postureInfo } from "./postureCheck";
 
 import Music from "./music";
-import helpCommand from "./help";
 import { idle } from "./player/management/idle";
 import { leave } from "./player/management/leave";
+import lunchPicker from "./lunchPicker";
+import menuCommand from "./menu";
 import pingCommand from "./ping";
-// import clearCommand from "./clear";
 import { queue } from "./player/management/queue";
 import { shuffle } from "./player/management/shuffle";
 import { skip } from "./player/management/skip";
@@ -50,17 +49,20 @@ const command = async (client: Client, message: Message, cmd: string, args: stri
       case "help":
       case "h":
       case "menu":
-        if (player) await helpCommand(message);
+        if (player) await menuCommand(message);
         break;
-      case "posture":
-        await addMemberToPostureRole(message);
+      case "lunch":
+        await lunchPicker(message, args);
         break;
-      case "badposture":
-        await addMemberToPostureRole(message, true);
-        break;
-      case "postureinfo":
-        await postureInfo(message);
-        break;
+      // case "posture":
+      //   await addMemberToPostureRole(message);
+      //   break;
+      // case "badposture":
+      //   await addMemberToPostureRole(message, true);
+      //   break;
+      // case "postureinfo":
+      //   await postureInfo(message);
+      //   break;
       case "idle":
         await idle(message);
         break;
