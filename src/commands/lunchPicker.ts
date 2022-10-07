@@ -59,6 +59,11 @@ const lunchPicker = async (message: Message, args: string[]) => {
       location:
         "https://www.google.se/maps/place/Tidningshuset+by+Pontus/@59.3272225,18.0154844,19.33z/data=!4m5!3m4!1s0x0:0xc12235f46d6e6a31!8m2!3d59.3271751!4d18.0153598",
     },
+    {
+      name: "Hot Sweet Thai Wok (kekabthai:en)",
+      location:
+        "https://www.google.se/maps/place/Hot+Sweet+Thai+Wok/@59.3254058,18.0088235,20.2z/data=!4m5!3m4!1s0x465f77dd5dc4ddfd:0x9867fe1aeda2eeeb!8m2!3d59.3254635!4d18.0089189",
+    },
   ];
 
   const winner = lunchPlaces[Math.floor(Math.random() * Object.keys(lunchPlaces).length)];
