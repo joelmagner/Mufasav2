@@ -1,10 +1,11 @@
 import * as play from "play-dl";
 
+import { getGuildId, getServerInfo } from "../utils/getGuildInfo";
+
 import { AudioPlayerStatus } from "@discordjs/voice";
 import { Message } from "discord.js";
 import { album } from "./player/spotify/album";
 import { createServer } from "../utils/createServer";
-import { getServerInfo } from "../utils/getGuildInfo";
 import { isUserInVoiceChannel } from "../utils/isUserInVoiceChannel";
 import { joinVoice } from "../utils/joinVoice";
 import { player } from "./player/player";
@@ -39,8 +40,8 @@ export default class Music {
       });
     }
 
-    if (!serverInfo && message.guild?.id) {
-      server.set(message.guild.id, createServer(voiceChannel, message.channel));
+    if (!serverInfo && getGuildId(message)) {
+      server.set(getGuildId(message), createServer(voiceChannel, message.channel));
     }
 
     await refreshSpotifyToken();
@@ -56,9 +57,7 @@ export default class Music {
       await album(message, args, playTop);
     }
 
-    // Join channel
     await joinVoice(message);
-
     if (getServerInfo(message)?.audioPlayer?.state.status !== AudioPlayerStatus.Playing) {
       return await player(message);
     }

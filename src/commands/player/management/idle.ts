@@ -1,6 +1,7 @@
+import { getGuildId, getServerInfo } from "../../../utils/getGuildInfo";
+
 import { AudioPlayerStatus } from "@discordjs/voice";
 import { Message } from "discord.js";
-import { getServerInfo } from "../../../utils/getGuildInfo";
 import { server } from "../../../utils/server";
 
 export const idle = async (message: Message) => {
@@ -15,7 +16,7 @@ export const idle = async (message: Message) => {
   // if five minutes have passed
   if (created + 300000 < Date.now()) {
     getServerInfo(message)?.connection?.destroy();
-    const guildId = message.guild?.id;
+    const guildId = getGuildId(message);
     if (guildId) server.delete(guildId);
     console.log("idle, leaving...");
   }
