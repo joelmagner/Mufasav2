@@ -47,6 +47,7 @@ const getHighestRelevance = (searchResults: YouTubeVideo[]): YouTubeVideo => {
     return 0;
   });
 
+
   const hasNameResemblance = isMusicChannel.sort((a: YouTubeVideo) => {
     return (a.title?.split(" ") ?? [""]).some((word) => {
       word.includes(a.channel?.name ?? "");
@@ -54,7 +55,20 @@ const getHighestRelevance = (searchResults: YouTubeVideo[]): YouTubeVideo => {
       ? -1
       : 0;
   });
-  return hasNameResemblance[0];
+
+  const preferOfficialOverLiveVersion = hasNameResemblance.sort((a: YouTubeVideo) => {
+    if((a.title?.toLocaleLowerCase().includes("official"))) {
+      return -1;
+    }
+
+    if((a.title?.toLocaleLowerCase().includes("live"))) {
+      return 1;
+    }
+
+    return 0;
+  });
+
+  return preferOfficialOverLiveVersion[0];
 };
 
 const searchNextSong = async (message: Message, server: Server) => {
@@ -165,16 +179,20 @@ export const player = async (message: Message) => {
       return await playSong(message, channel, true, soundcloudSong);
     }
 
+    const nextSong = getServerInfo(message)?.songs?.[0];
+
+    if (nextSong?.url.includes("youtube.com")) {
+      return await playSong(message, channel, false, nextSong as play.YouTubeVideo);
+    }
+
     const search = await searchNextSong(message, channel);
     if (search) return await playSong(message, channel, false, search);
 
-    if (!soundcloudSong && !search) {
-      // give up, go to next song.
-      channel.songs.shift();
-      channel.audioPlayer.state.status = AudioPlayerStatus.Idle;
-      await player(message);
-      return await message.channel.send(playError);
-    }
+    // give up, go to next song.
+    channel.songs.shift();
+    channel.audioPlayer.state.status = AudioPlayerStatus.Idle;
+    await player(message);
+    return await message.channel.send(playError);
   }
-  return await message.channel.send("Something went wrong...");
+  return await message.channel.send(playError);
 };

@@ -4,7 +4,7 @@ import { Song } from "../../types/song.type";
 import { logoPng } from "../logo";
 
 export const queueInfo = new MessageEmbed()
-  .setAuthor("Music Queue:")
+  .setAuthor({ name: "Music Queue:" })
   .setDescription("Select the queue page you want to look at")
   .setColor(0x05c7e9)
   .setTimestamp()

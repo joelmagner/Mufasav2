@@ -6,7 +6,7 @@ const menuCommand = async (message: Message) => {
   const help = new MessageEmbed()
     .setColor("#F8A926")
     .setTitle("Mufasa bot")
-    .setAuthor("v1.0.2", logoPng, logoPng)
+    .setAuthor({ name: "v1.0.3", iconURL: logoPng })
     .setThumbnail(logoPng)
     .addFields(
       {
