@@ -8,7 +8,7 @@
   },
   "scripts": {
     "watch": "tsc -w",
-    "dev": "nodemon dist/app.js",
+    "dev": "node --watch dist/app.js",
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "tsc -p tsconfig.json",
     "start": "node dist/app.js"
