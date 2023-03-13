@@ -1,9 +1,9 @@
-import { Message, MessageActionRow, MessageEmbed, MessageSelectMenu } from "discord.js";
+import { ActionRowBuilder, EmbedBuilder, Message, StringSelectMenuBuilder } from "discord.js";
 
 import { Song } from "../../types/song.type";
 import { logoPng } from "../logo";
 
-export const queueInfo = new MessageEmbed()
+export const queueInfo = new EmbedBuilder()
   .setAuthor({ name: "Music Queue:" })
   .setDescription("Select the queue page you want to look at")
   .setColor(0x05c7e9)
@@ -11,8 +11,8 @@ export const queueInfo = new MessageEmbed()
   .setFooter({ text: "Mufasa", iconURL: logoPng });
 
 export const queuePages = async (message: Message, songs: Song[]) => {
-  const row = new MessageActionRow();
-  const menu = new MessageSelectMenu().setCustomId("queue_menu").setPlaceholder("Select Queue Page");
+  const row = new ActionRowBuilder();
+  const menu = new StringSelectMenuBuilder().setCustomId("queue_menu").setPlaceholder("Select Queue Page");
   const qPages = Math.ceil((songs?.length ?? 1) / 10);
   for (let i = 0; i < qPages; i++) {
     menu.addOptions([

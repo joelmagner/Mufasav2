@@ -1,9 +1,9 @@
-import { Message, MessageEmbed } from "discord.js";
+import { EmbedBuilder, Message } from "discord.js";
 
 import { logoPng } from "../utils/logo";
 
 const menuCommand = async (message: Message) => {
-  const help = new MessageEmbed()
+  const help = new EmbedBuilder()
     .setColor("#F8A926")
     .setTitle("Mufasa bot")
     .setAuthor({ name: "v1.0.3", iconURL: logoPng })

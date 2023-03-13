@@ -1,4 +1,4 @@
-import { Message } from "discord.js";
+import { ChannelType, Message } from "discord.js";
 
 const clearCommand = async (message: Message, args: string[]) => {
   let limit = 10;
@@ -18,7 +18,7 @@ const clearCommand = async (message: Message, args: string[]) => {
 
   await message.channel.send(`Clearing **${limit}** messages...`);
   setTimeout(async () => {
-    if (message.channel.type === "GUILD_TEXT") {
+    if (message.channel.type === ChannelType.GuildText) {
       return await message.channel.bulkDelete(limit);
     }
     return;

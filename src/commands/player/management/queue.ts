@@ -1,7 +1,7 @@
+import { ComponentType, Message } from "discord.js";
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { queueInfo, queuePages } from "../../../utils/messages/queue.msg";
+import { queueInfo } from "../../../utils/messages/queue.msg";
 
-import { Message } from "discord.js";
 import { Song } from "src/types/song.type";
 import { emptyErrorMessage } from "../../../utils/errors/empty.error";
 import { getServerInfo } from "../../../utils/getGuildInfo";
@@ -10,16 +10,16 @@ export const queue = async (message: Message) => {
   const songs = getServerInfo(message)?.songs;
   if (!songs) return await message.channel.send(emptyErrorMessage);
 
-  await message.channel.send({ embeds: [queueInfo], components: [await queuePages(message, songs)] });
+  // await message.channel.send({ embeds: [queueInfo], components: [await queuePages(message, songs)] });
   const collector = message.channel.createMessageComponentCollector({
-    componentType: "SELECT_MENU",
+    componentType: ComponentType.StringSelect,
     time: 30000,
     max: 9,
   });
 
   collector.on("collect", async (i) => {
     if (i.user.id !== message?.member?.id) {
-      return await i.reply({
+      await i.reply({
         content: `This menu is controlled by @${message?.member?.user.username}!`,
         ephemeral: true,
       });
@@ -44,7 +44,7 @@ export const queue = async (message: Message) => {
       await i.update({ embeds: [updatedMessage], fetchReply: true });
     } catch (err) {
       console.log("Queue Message Error:", err);
-      return await i.reply({
+      await i.reply({
         embeds: [
           {
             description: `Something went wrong...`,
@@ -56,7 +56,7 @@ export const queue = async (message: Message) => {
   });
 
   collector.on("dispose", async (i) => {
-    return await i.update({ components: [] });
+    await i.update({ components: [] });
   });
 
   collector.on("end", async (i) => {

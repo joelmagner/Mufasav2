@@ -4,15 +4,15 @@ import { getGuildId, getServerInfo } from "../utils/getGuildInfo";
 
 import { AudioPlayerStatus } from "@discordjs/voice";
 import { Message } from "discord.js";
-import { album } from "./player/spotify/album";
 import { createServer } from "../utils/createServer";
 import { isUserInVoiceChannel } from "../utils/isUserInVoiceChannel";
 import { joinVoice } from "../utils/joinVoice";
-import { player } from "./player/player";
-import { playlist } from "./player/spotify/playlist";
-import { refreshSpotifyToken } from "../utils/sessions/spotify.session";
-import { search } from "./player/search/search";
 import { server } from "../utils/server";
+import { refreshSpotifyToken } from "../utils/sessions/spotify.session";
+import { player } from "./player/player";
+import { search } from "./player/search/search";
+import { album } from "./player/spotify/album";
+import { playlist } from "./player/spotify/playlist";
 import { track } from "./player/spotify/track";
 
 export default class Music {
@@ -25,7 +25,7 @@ export default class Music {
 
     // update to see if bot has been moved
     if (serverInfo?.voiceChannel) {
-      serverInfo.voiceChannel = message.guild?.me?.voice.channel ?? serverInfo.voiceChannel;
+      serverInfo.voiceChannel = message.guild?.members?.me?.voice.channel ?? serverInfo.voiceChannel;
     }
 
     // check if same channel as bot.

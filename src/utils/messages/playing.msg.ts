@@ -1,6 +1,6 @@
 import { SoundCloudTrack, YouTubeVideo } from "play-dl";
 
-import { MessageEmbed } from "discord.js";
+import { EmbedBuilder } from "discord.js";
 import { Song } from "../../types/song.type";
 import { logoPng } from "../logo";
 
@@ -10,7 +10,7 @@ const calculateDuration = (s: number) => {
 };
 
 export const playingMessageSoundCloud = (req: Song, song: SoundCloudTrack) => {
-  return new MessageEmbed()
+  return new EmbedBuilder()
     .addFields({ name: "Requested:", value: req.title }, { name: "Now Playing:", value: song.name })
     .setFooter({
       text: `Duration: ${calculateDuration(song.durationInSec)}`,
@@ -21,7 +21,7 @@ export const playingMessageSoundCloud = (req: Song, song: SoundCloudTrack) => {
 };
 
 export const playingMessageYoutube = (req: Song, song: YouTubeVideo) => {
-  return new MessageEmbed()
+  return new EmbedBuilder()
     .addFields({ name: "Requested:", value: req.title }, { name: "Now Playing:", value: song.title ?? "" })
     .setFooter({ text: `Duration: ${song.durationRaw}`, iconURL: logoPng })
     .setThumbnail(req.thumbnail ?? "")

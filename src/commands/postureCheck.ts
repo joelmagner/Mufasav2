@@ -1,4 +1,4 @@
-import { Client, Message, TextChannel } from "discord.js";
+import { ChannelType, Client, Message, TextChannel } from "discord.js";
 
 const postureImages = [
   "https://preview.redd.it/dg7bp13xzc871.jpg?width=640&crop=smart&auto=webp&s=2404de7110ff19c45539e1bce3b849670657a517",
@@ -38,7 +38,7 @@ const postureInfo = async (message: Message) => {
 //
 const createChannelAndRole = async (message: Message) => {
   // create channel
-  await message.guild?.channels.create("posturecheck", { type: "GUILD_TEXT" });
+  await message.guild?.channels.create({ name: "posturecheck", type: ChannelType.GuildText });
   // create role
   await message.guild?.roles.create({
     name: "posture",
@@ -110,7 +110,7 @@ const postureCommand = async (client: Client) => {
   guilds.forEach(async (guild) => {
     const g = await guild.fetch();
     g.channels.cache.forEach(async (channel) => {
-      if (channel.type === "GUILD_TEXT" && (channel as TextChannel).name.toLowerCase() === "posturecheck") {
+      if (channel.type === ChannelType.GuildText && (channel as TextChannel).name.toLowerCase() === "posturecheck") {
         const roles = await g.roles.fetch();
         const postureRole = roles.find((role) => role.name === "posture");
         if (!postureRole?.id) return;

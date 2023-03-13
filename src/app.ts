@@ -1,4 +1,4 @@
-import { Client, Intents, Message } from "discord.js";
+import { Client, IntentsBitField, Message, Partials } from "discord.js";
 
 import command from "./commands/command";
 import { config } from "dotenv";
@@ -9,8 +9,8 @@ export class App {
   public prefix = "!";
   constructor() {
     this.client = new Client({
-      intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES, Intents.FLAGS.GUILD_VOICE_STATES],
-      partials: ["MESSAGE", "CHANNEL", "REACTION"],
+      intents: [IntentsBitField.Flags.Guilds, IntentsBitField.Flags.GuildMessages, IntentsBitField.Flags.GuildVoiceStates],
+      partials: [Partials.Message, Partials.Channel, Partials.Reaction],
     });
     // check env.d.ts for the required keys
     config({ path: process.cwd() + "/.env" });
@@ -31,10 +31,10 @@ export class App {
     });
     await this.login();
 
-    this.client.user?.setActivity({
-      type: "PLAYING",
-      name: "🦁 !help",
-    });
+    // this.client.user?.setActivity({
+    //   type: "PLAYING",
+    //   name: "🦁 !help",
+    // });
 
     this.client.on("messageCreate", async (message: Message) => {
       if (!message.content.startsWith(this.prefix) || message.author.bot) {
