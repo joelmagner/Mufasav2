@@ -1,17 +1,16 @@
 import * as play from "play-dl";
 
-import { AudioPlayerStatus, NoSubscriberBehavior, createAudioPlayer, createAudioResource } from "@discordjs/voice";
+import { AudioPlayerStatus, createAudioPlayer, createAudioResource, NoSubscriberBehavior } from "@discordjs/voice";
 import { playingMessageSoundCloud, playingMessageYoutube } from "../../utils/messages/playing.msg";
 
 import { Message } from "discord.js";
+import { SoundCloudTrack, YouTubeVideo } from "play-dl";
 import { Server } from "../../types/server.type";
-import { SoundCloudTrack } from "play-dl";
-import { YouTubeVideo } from "play-dl";
-import { getServerInfo } from "../../utils/getGuildInfo";
-import { idle } from "./management/idle";
 import { playError } from "../../utils/errors/play.error";
-import { refreshSoundcloudToken } from "../../utils/sessions/soundcloud.session";
+import { getServerInfo } from "../../utils/getGuildInfo";
 import { server } from "../../utils/server";
+import { refreshSoundcloudToken } from "../../utils/sessions/soundcloud.session";
+import { idle } from "./management/idle";
 
 let getTimer: NodeJS.Timeout;
 const startTimer = async (message: Message) => {
@@ -47,7 +46,6 @@ const getHighestRelevance = (searchResults: YouTubeVideo[]): YouTubeVideo => {
     return 0;
   });
 
-
   const hasNameResemblance = isMusicChannel.sort((a: YouTubeVideo) => {
     return (a.title?.split(" ") ?? [""]).some((word) => {
       word.includes(a.channel?.name ?? "");
@@ -57,11 +55,11 @@ const getHighestRelevance = (searchResults: YouTubeVideo[]): YouTubeVideo => {
   });
 
   const preferOfficialOverLiveVersion = hasNameResemblance.sort((a: YouTubeVideo) => {
-    if((a.title?.toLocaleLowerCase().includes("official"))) {
+    if (a.title?.toLocaleLowerCase().includes("official")) {
       return -1;
     }
 
-    if((a.title?.toLocaleLowerCase().includes("live"))) {
+    if (a.title?.toLocaleLowerCase().includes("live")) {
       return 1;
     }
 
@@ -169,7 +167,7 @@ export const player = async (message: Message) => {
   if (!getServerInfo(message)?.songs?.length) {
     getServerInfo(message)?.connection?.destroy();
     if (message.guild?.id) server.delete(message.guild.id);
-    return await message.channel.send("Queue is empty. Destroying voice connection.");
+    return await message.channel.send("Queue is empty. Leaving.");
   }
 
   if (channel.audioPlayer?.state.status === AudioPlayerStatus.Idle || channel.audioPlayer?.state.status === AudioPlayerStatus.Paused) {
